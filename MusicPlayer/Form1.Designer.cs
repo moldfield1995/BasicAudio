@@ -33,18 +33,8 @@
             this.PlayButton = new System.Windows.Forms.Button();
             this.PauseButton = new System.Windows.Forms.Button();
             this.ListSongName = new System.Windows.Forms.ListBox();
-            tracker = new System.Windows.Forms.TrackBar();
-            tracker.CausesValidation = false;
-            tracker.LargeChange = 0;
-            tracker.Location = new System.Drawing.Point(197, 11);
-            tracker.Maximum = 20000;
-            tracker.Name = "Tracker";
-            tracker.Size = new System.Drawing.Size(237, 45);
-            tracker.SmallChange = 0;
-            tracker.TabIndex = 3;
-            tracker.MouseDown += Tracker_MouseDown;
-            tracker.MouseUp += Tracker_MouseUp;
-            ((System.ComponentModel.ISupportInitialize)(tracker)).BeginInit();
+            this.tracker = new System.Windows.Forms.TrackBar();
+            ((System.ComponentModel.ISupportInitialize)(this.tracker)).BeginInit();
             this.SuspendLayout();
             // 
             // PlayButton
@@ -70,6 +60,7 @@
             // 
             // ListSongName
             // 
+            this.ListSongName.AllowDrop = true;
             this.ListSongName.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ListSongName.ForeColor = System.Drawing.SystemColors.Info;
             this.ListSongName.FormattingEnabled = true;
@@ -77,22 +68,35 @@
             this.ListSongName.Name = "ListSongName";
             this.ListSongName.Size = new System.Drawing.Size(129, 160);
             this.ListSongName.TabIndex = 2;
+            this.ListSongName.DragDrop += new System.Windows.Forms.DragEventHandler(this.ListSongName_DragDrop);
+            this.ListSongName.DragOver += new System.Windows.Forms.DragEventHandler(this.ListSongName_DragOver);
+            // 
+            // tracker
+            // 
+            this.tracker.CausesValidation = false;
+            this.tracker.LargeChange = 0;
+            this.tracker.Location = new System.Drawing.Point(197, 11);
+            this.tracker.Maximum = 20000;
+            this.tracker.Name = "tracker";
+            this.tracker.Size = new System.Drawing.Size(237, 45);
+            this.tracker.SmallChange = 0;
+            this.tracker.TabIndex = 3;
+            this.tracker.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Tracker_MouseDown);
+            this.tracker.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Tracker_MouseUp);
             // 
             // MusicPlayer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(558, 302);
-            this.Controls.Add(tracker);
+            this.Controls.Add(this.tracker);
             this.Controls.Add(this.ListSongName);
             this.Controls.Add(this.PauseButton);
             this.Controls.Add(this.PlayButton);
             this.Name = "MusicPlayer";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(tracker)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tracker)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -102,8 +106,8 @@
 
         private System.Windows.Forms.Button PlayButton;
         private System.Windows.Forms.Button PauseButton;
-        private System.Windows.Forms.ListBox ListSongName;
         private System.Windows.Forms.TrackBar tracker;
+        private System.Windows.Forms.ListBox ListSongName;
     }
 }
 

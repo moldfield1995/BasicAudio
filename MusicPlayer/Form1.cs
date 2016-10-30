@@ -8,6 +8,13 @@ namespace MusicPlayer
 {
     public partial class MusicPlayer : Form
     {
+        private struct FileData {
+            public string name;
+            public string location;
+        }
+
+
+
         private IWaveSource source;
         private WasapiOut audioOut;
         public MusicPlayer()
@@ -18,8 +25,6 @@ namespace MusicPlayer
             audioOut = new WasapiOut();
             ChangeSong("");
         }
-
-
 
         private void Tracker_MouseUp(object sender, MouseEventArgs e)
         {
@@ -74,6 +79,21 @@ namespace MusicPlayer
         {
             audioOut.Stop();
             audioOut.Dispose();
+        }
+
+        private void ListSongName_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                ListSongName.Items.AddRange(files);
+            }
+        }
+
+        private void ListSongName_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Link;
         }
     }
 }
