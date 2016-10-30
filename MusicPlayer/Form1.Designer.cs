@@ -22,6 +22,12 @@
             base.Dispose(disposing);
         }
 
+        private void trackerInit()
+        {
+            musicHandler = new MusicHandler();
+            ((System.ComponentModel.ISupportInitialize)(musicHandler.tracker)).BeginInit();
+        }
+
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -33,8 +39,8 @@
             this.PlayButton = new System.Windows.Forms.Button();
             this.PauseButton = new System.Windows.Forms.Button();
             this.ListSongName = new System.Windows.Forms.ListBox();
-            this.tracker = new System.Windows.Forms.TrackBar();
-            ((System.ComponentModel.ISupportInitialize)(this.tracker)).BeginInit();
+            musicHandler = new MusicHandler();
+            ((System.ComponentModel.ISupportInitialize)(musicHandler.tracker)).BeginInit();
             this.SuspendLayout();
             // 
             // PlayButton
@@ -68,17 +74,6 @@
             this.ListSongName.Size = new System.Drawing.Size(129, 160);
             this.ListSongName.TabIndex = 2;
             // 
-            // Tracker
-            // 
-            this.tracker.CausesValidation = false;
-            this.tracker.LargeChange = 0;
-            this.tracker.Location = new System.Drawing.Point(197, 11);
-            this.tracker.Maximum = 20000;
-            this.tracker.Name = "Tracker";
-            this.tracker.Size = new System.Drawing.Size(237, 45);
-            this.tracker.SmallChange = 0;
-            this.tracker.TabIndex = 3;
-            // 
             // MusicPlayer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -87,13 +82,13 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(558, 302);
-            this.Controls.Add(this.tracker);
+            this.Controls.Add(musicHandler.tracker);
             this.Controls.Add(this.ListSongName);
             this.Controls.Add(this.PauseButton);
             this.Controls.Add(this.PlayButton);
             this.Name = "MusicPlayer";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.tracker)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(musicHandler.tracker)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -104,7 +99,6 @@
         private System.Windows.Forms.Button PlayButton;
         private System.Windows.Forms.Button PauseButton;
         private System.Windows.Forms.ListBox ListSongName;
-        private System.Windows.Forms.TrackBar tracker;
     }
 }
 

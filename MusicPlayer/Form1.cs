@@ -15,8 +15,8 @@ namespace MusicPlayer
         private MusicHandler musicHandler;
         public MusicPlayer()
         {
+            //trackerInit();
             InitializeComponent();
-            musicHandler = new MusicHandler();
             musicHandler.ChangeSong("");
         }
 
@@ -30,5 +30,9 @@ namespace MusicPlayer
             musicHandler.Pause();
         }
 
-  }
+        private void MusicPlayer_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+    }
 }
