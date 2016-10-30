@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="CSCore">
       <HintPath>.\CSCore.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

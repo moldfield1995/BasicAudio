@@ -11,10 +11,8 @@ namespace MusicPlayer
         private struct FileData {
             public string name;
             public string location;
+            public override string ToString() { return name; }
         }
-
-
-
         private IWaveSource source;
         private WasapiOut audioOut;
         public MusicPlayer()
@@ -52,7 +50,25 @@ namespace MusicPlayer
 
         private void MusicPlayer_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if (e.KeyCode == Keys.MediaPlayPause)
+                PlayPause();
+            else if (e.KeyCode == Keys.MediaStop)
+                Stop();
+            else if (e.KeyCode == Keys.VolumeDown || e.KeyCode == Keys.Subtract)
+            {
+                if (audioOut.Volume - 0.1f >= 0f)
+                    audioOut.Volume -= 0.1f;
+                else
+                    audioOut.Volume = 0f;
+            }
+            else if (e.KeyCode == Keys.VolumeUp || e.KeyCode == Keys.Add)
+            {
+                if (audioOut.Volume + 0.1f <= 1f)
+                    audioOut.Volume += 0.1f;
+                else
+                    audioOut.Volume = 1f;
+            }
+           
         }
         public void ChangeSong(string file)
         {
@@ -64,17 +80,10 @@ namespace MusicPlayer
             audioOut.Stop();
             audioOut.Initialize(source);
         }
-        public void Play()
-        {
-            if (audioOut != null)
-                audioOut.Play();
-
-        }
-        public void Pause()
-        {
-            if (audioOut != null)
-                audioOut.Pause();
-        }
+        public void Play() { audioOut.Play(); }
+        public void Pause() { audioOut.Pause();}
+        public void Stop() { audioOut.Stop(); }
+        public void PlayPause() { if (audioOut.PlaybackState != PlaybackState.Playing) audioOut.Play(); else audioOut.Pause(); }
         public void Destroy()
         {
             audioOut.Stop();
@@ -94,6 +103,5 @@ namespace MusicPlayer
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.Link;
-        }
-    }
+        }}
 }
