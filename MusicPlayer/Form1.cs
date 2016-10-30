@@ -1,38 +1,79 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.IO;
+using CSCore;
+using CSCore.SoundOut;
+using CSCore.Codecs;
 namespace MusicPlayer
 {
     public partial class MusicPlayer : Form
     {
-        private MusicHandler musicHandler;
+        private IWaveSource source;
+        private WasapiOut audioOut;
         public MusicPlayer()
         {
             //trackerInit();
             InitializeComponent();
-            musicHandler.ChangeSong("");
+            source = null;
+            audioOut = new WasapiOut();
+            ChangeSong("");
+        }
+
+
+
+        private void Tracker_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (source.Position != tracker.Value)
+            {
+                source.Position = tracker.Value;
+                Play();
+            }
+        }
+
+        private void Tracker_MouseDown(object sender, MouseEventArgs e)
+        {
+            Pause();
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
-            musicHandler.Play();
+            Play();
         }
 
         private void PauseButton_Click(object sender, EventArgs e)
         {
-            musicHandler.Pause();
+            Pause();
         }
 
         private void MusicPlayer_KeyDown(object sender, KeyEventArgs e)
         {
 
+        }
+        public void ChangeSong(string file)
+        {
+            file = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+            file = Path.Combine(file, "Monstercat Podcast Ep. 121.m4a");
+            source = CodecFactory.Instance.GetCodec(file);
+            tracker.Maximum = (int)source.Length;
+            tracker.Value = 0;
+            audioOut.Stop();
+            audioOut.Initialize(source);
+        }
+        public void Play()
+        {
+            if (audioOut != null)
+                audioOut.Play();
+
+        }
+        public void Pause()
+        {
+            if (audioOut != null)
+                audioOut.Pause();
+        }
+        public void Destroy()
+        {
+            audioOut.Stop();
+            audioOut.Dispose();
         }
     }
 }
