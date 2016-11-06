@@ -6,6 +6,7 @@ using CSCore.SoundOut;
 using CSCore.Codecs;
 namespace MusicPlayer
 {
+    
     public partial class MusicPlayer : Form
     {
         private struct FileData {
@@ -15,13 +16,26 @@ namespace MusicPlayer
         }
         private IWaveSource source;
         private WasapiOut audioOut;
+        private KeyboardHook keybordHook;
         public MusicPlayer()
         {
             //trackerInit();
             InitializeComponent();
             source = null;
             audioOut = new WasapiOut();
+            keybordHook = new KeyboardHook();
+            keybordHook.KeyboardEvent += KeybordHook_KeyboardEvent;
             ChangeSong("");
+        }
+
+        private void KeybordHook_KeyboardEvent(KeyboardEvents kEvent, Keys key)
+        {
+            if(kEvent == KeyboardEvents.KeyDown)
+            {
+                if (key == Keys.MediaPlayPause)
+                    PlayPause();
+                
+            }
         }
 
         private void Tracker_MouseUp(object sender, MouseEventArgs e)
