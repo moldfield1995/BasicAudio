@@ -6,35 +6,27 @@ using CSCore.SoundOut;
 using CSCore.Codecs;
 namespace MusicPlayer
 {
-    
     public partial class MusicPlayer : Form
     {
-        private struct FileData {
-            public string name;
-            public string location;
-            public override string ToString() { return name; }
-        }
         private IWaveSource source;
         private WasapiOut audioOut;
-        private KeyboardHook keybordHook;
+
         public MusicPlayer()
         {
             //trackerInit();
             InitializeComponent();
             source = null;
             audioOut = new WasapiOut();
-            keybordHook = new KeyboardHook();
-            keybordHook.KeyboardEvent += KeybordHook_KeyboardEvent;
-            ChangeSong("");
+            audioOut.Stopped += songFinished;
         }
 
-        private void KeybordHook_KeyboardEvent(KeyboardEvents kEvent, Keys key)
+        private void songFinished(object sender, PlaybackStoppedEventArgs e)
         {
-            if(kEvent == KeyboardEvents.KeyDown)
+            if (e.Exception == null && !e.HasError && source.Position >= source.Length)
             {
-                if (key == Keys.MediaPlayPause)
-                    PlayPause();
-                
+                //check if out of bounds
+                ListSongName.SetSelected(ListSongName.SelectedIndex++, true);
+
             }
         }
 
@@ -82,20 +74,36 @@ namespace MusicPlayer
                 else
                     audioOut.Volume = 1f;
             }
-           
+
         }
         public void ChangeSong(string file)
         {
-            file = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
-            file = Path.Combine(file, "Monstercat Podcast Ep. 121.m4a");
-            source = CodecFactory.Instance.GetCodec(file);
-            tracker.Maximum = (int)source.Length;
-            tracker.Value = 0;
-            audioOut.Stop();
-            audioOut.Initialize(source);
+            if (File.Exists(file))
+            {
+                source = CodecFactory.Instance.GetCodec(file);
+                tracker.Maximum = (int)source.Length;
+                tracker.Value = 0;
+                audioOut.Stop();
+                audioOut.Initialize(source);
+            }
+            else
+            {
+
+            }
+
         }
-        public void Play() { audioOut.Play(); }
-        public void Pause() { audioOut.Pause();}
+        public void CreatePopupWait(string message)
+        {
+            ErrorPopUp popup = new ErrorPopUp();
+            popup.SetString(message);
+            this.ShowDialog(popup);
+        }
+        public void Play()
+        {
+            if (source != null)
+                audioOut.Play();
+        }
+        public void Pause() { audioOut.Pause(); }
         public void Stop() { audioOut.Stop(); }
         public void PlayPause() { if (audioOut.PlaybackState != PlaybackState.Playing) audioOut.Play(); else audioOut.Pause(); }
         public void Destroy()
@@ -109,7 +117,13 @@ namespace MusicPlayer
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                ListSongName.Items.AddRange(files);
+                FileData[] fileData = new FileData[files.Length];
+                for (int i = 0, length = files.Length; i < length; i++)
+                {
+                    fileData[i].location = files[i];
+                    fileData[i].name = Path.GetFileNameWithoutExtension(files[i]);
+                }
+                ListSongName.Items.AddRange(fileData);
             }
         }
 
@@ -117,5 +131,18 @@ namespace MusicPlayer
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.Link;
-        }}
+        }
+
+        private void ListSongName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FileData fd = (FileData)ListSongName.SelectedItem;
+            ChangeSong(fd.location);
+        }
+    }
+    public class FileData
+    {
+        public string name;
+        public string location;
+        public override string ToString() { return name; }
+    }
 }

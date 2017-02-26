@@ -120,6 +120,7 @@
             this.ListSongName.Name = "ListSongName";
             this.ListSongName.Size = new System.Drawing.Size(369, 137);
             this.ListSongName.TabIndex = 2;
+            this.ListSongName.SelectedIndexChanged += new System.EventHandler(this.ListSongName_SelectedIndexChanged);
             this.ListSongName.DragDrop += new System.Windows.Forms.DragEventHandler(this.ListSongName_DragDrop);
             this.ListSongName.DragOver += new System.Windows.Forms.DragEventHandler(this.ListSongName_DragOver);
             // 
@@ -142,6 +143,7 @@
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tracker)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         #endregion
